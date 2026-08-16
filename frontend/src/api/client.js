@@ -14,11 +14,23 @@ export function setToken(token) {
 }
 
 class ApiError extends Error {
-  constructor(message, status, details) {
+  constructor(message, status, details, retryAfterSeconds) {
     super(message);
     this.status = status;
     this.details = details;
+    this.retryAfterSeconds = retryAfterSeconds;
   }
+}
+
+function parseRetryAfterSeconds(response) {
+  const retryAfter = response.headers.get("retry-after");
+  if (retryAfter && !Number.isNaN(Number(retryAfter))) return Number(retryAfter);
+
+  // express-rate-limit's standard (draft-7) header, seconds until the window resets.
+  const rateLimitReset = response.headers.get("ratelimit-reset");
+  if (rateLimitReset && !Number.isNaN(Number(rateLimitReset))) return Number(rateLimitReset);
+
+  return undefined;
 }
 
 async function request(path, { method = "GET", body, auth = false, query } = {}) {
@@ -49,6 +61,16 @@ async function request(path, { method = "GET", body, auth = false, query } = {})
   const payload = contentType.includes("application/json") ? await response.json() : null;
 
   if (!response.ok) {
+    if (response.status === 429) {
+      const retryAfterSeconds = parseRetryAfterSeconds(response);
+      const message =
+        payload?.error?.message ||
+        (retryAfterSeconds
+          ? `Too many attempts. Please try again in ${Math.ceil(retryAfterSeconds / 60)} minute${Math.ceil(retryAfterSeconds / 60) === 1 ? "" : "s"}.`
+          : "Too many attempts. Please try again shortly.");
+      throw new ApiError(message, response.status, payload?.error?.details, retryAfterSeconds);
+    }
+
     const message = payload?.error?.message || "Something went wrong. Please try again.";
     throw new ApiError(message, response.status, payload?.error?.details);
   }
