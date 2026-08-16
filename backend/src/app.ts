@@ -18,7 +18,7 @@ export function createApp(): Express {
   const app = express();
 
   app.use(helmet());
-  app.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));
+  app.use(cors({ origin: env.CORS_ORIGIN, credentials: true, exposedHeaders: ["Retry-After", "RateLimit-Reset", "RateLimit-Limit", "RateLimit-Remaining"] }));
   app.use(compression());
   app.use(express.json({ limit: "2mb" }));
   app.use(express.urlencoded({ extended: true }));
