@@ -411,6 +411,51 @@
   }
 }
 
+/* ---------- Login page ---------- */
+.login-hero {
+  text-align: center;
+  padding: 56px 0 30px;
+}
+
+.login-icon {
+  margin: 0 auto 18px;
+  width: 60px;
+  height: 60px;
+  font-size: 1.6rem;
+  border-radius: 18px;
+}
+
+.login-hero h1 {
+  font-size: 1.6rem;
+  color: var(--navy-900);
+  margin-bottom: 8px;
+}
+
+.login-hero p {
+  color: #5c6b85;
+}
+
+.login-card {
+  box-shadow: var(--glass-shadow);
+}
+
+.login-footnote {
+  text-align: center;
+  font-size: 0.84rem;
+  color: #7c8aa5;
+  margin-top: 22px;
+  padding-bottom: 40px;
+}
+
+.login-footnote a {
+  color: var(--blue-600);
+  font-weight: 600;
+}
+
+.login-footnote a:hover {
+  text-decoration: underline;
+}
+
 /* ---------- Sticky action sidebar, desktop only ---------- */
 .sticky-panel {
   position: sticky;
