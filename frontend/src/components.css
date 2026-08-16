@@ -216,6 +216,38 @@
   cursor: pointer;
 }
 
+/* ---------- Password field with visibility toggle ---------- */
+.password-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-field .input {
+  padding-right: 48px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 6px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  color: #7c8aa5;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.password-toggle:hover {
+  color: var(--blue-600);
+  background: var(--blue-50);
+}
+
 .chip-group {
   display: flex;
   flex-wrap: wrap;
